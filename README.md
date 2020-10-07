@@ -181,25 +181,6 @@ Para configurar la red en nuestra maquina virtual es necesario abrir panel de co
 
 ![verificate Configuration router](Images/tiny_linux.PNG?raw=true "Title")
 
-# Verificando conexion
-Para poder verificar la conexion de VPC con la maquina linux en la consola de nuestra VPC executamos 'ping 192.168.12.192'
-
-
-![verificate Configuration router](Images/pc1topc6.PNG?raw=true "Title")
-
-
-Para poder verificar la conexion de VPC con otra vpc en la consola de nuestra VPC executamos 'ping 192.168.12.80'
-
-
-![verificate Configuration router](Images/pc1topc5.PNG?raw=true "Title")
-
-
-Para poder verificar la conecion de nuestra maquina virtual con alguna de nuestras VPC hacemos ping con alguna de ellas en este caso 'ping 192.168.12.5'
-
-
-![verificate Configuration router](Images/pc6topc1.PNG?raw=true "Title")
-
-
 ## Captura de paquetes
 Para capturar paquetes es necesario realizar un ping de forma extendida mientras capturamos en nuestro caso lo hacemos desde tiny linux. hacia el VPC3, despues en GNS3 hacemos click izquierdo la interfaz que queremos capturar y seleccionamos capturar, se nos abrira un dialogo donde se nos indicara el puerto a capturar, pulsamos ok y se abrira Wireshark mostrandonos los paquetes request que envia nuestra maquina tiny linux y la respuesta de la VPC3, con doble clic podremos expandir la informacion de dichos paquetes y ver la informacion que tienen.
 
@@ -211,3 +192,75 @@ Para capturar paquetes es necesario realizar un ping de forma extendida mientras
 
 
 
+## Diagrama de identificación de rutas principales
+Para poder identificar las rutas principales hacemos uso de spanning tree protocol ya que este nos indica que puertos son bloqueados, para evitar loops ademas de la captura de paquetes.
+
+Primero verificamos en los 3 EtherSwitch que puertos son bloqueados para evitar loops, usamos el comando 'sh spanning-tree brief
+   - EtherSwitch Router (ESW1) podemos identificar que este EtherSwitch es el root
+   
+   
+   ![spanning root](Images/spanningtreeroot.PNG?raw=true "Title")
+   
+   
+   - EtherSwitch Router2 (ESW2)
+   
+   
+   ![spanning sw1p1](Images/spanningtreesw1p1.PNG?raw=true "Title")
+   ![spanning sw1p2](Images/spanningtreesw1p2.PNG?raw=true "Title")
+   
+   
+   - EtherSwitch Router3 (ESW3)
+   
+   
+   ![spanning sw1p1](Images/spanningtreesw2p1.PNG?raw=true "Title")
+   ![spanning sw1p2](Images/spanningtreesw2p2.PNG?raw=true "Title")
+   
+Para la captura la realizaremos en los dos puertos del EtherSwitch Root (ESW1) esto para corroborar los caminos principales. seleccionamos con clic derecho y pulsamos capturar podremos ver que los dos puertos que van del ESW1 hacia ESW2 y ESW3 son los cuales tienen trafico a la hora de realizar ping, ya que podemos ver el icmp request y reply que realiza los equipos al realizar ping con esto ya podemos crear nuestro diagrama de caminos principlaes y agregar quie es el ESW root, cabe aclarar que es necesario siempre que el ESW root tiene que estar adyacente siempre al router que usemos.
+
+Captura ESW1 a ESW2
+
+
+![SW1-SW2](Images/camino0.PNG?raw=true "Title")
+
+
+Captura ESW1 a ESW3
+
+
+![SW1-SW2](Images/camino1.PNG?raw=true "Title")
+
+
+Diagrama caminos principales y ESW root
+
+
+![ruta principal](Images/rutaprincipal.PNG?raw=true "Title")
+
+
+# Verificando conexion
+Para poder verificar la conexion de VPC con la maquina linux en la consola de nuestra VPC executamos 'ping 192.168.11.20' (VLAN 10 a VLAN 10)
+
+
+![ping vlan 10 10](Images/pingtinyvlan10.PNG?raw=true "Title")
+
+
+Para poder verificar la conexion de VPC con la maquina linux en la consola de nuestra VPC executamos 'ping 192.168.21.10' (VLAN 10 a VLAN 20)
+
+
+![ping vlan 10 20](Images/pingtinyvlan20.PNG?raw=true "Title")
+
+
+Para poder verificar la conexion de VPC1 con otra VPC en la consola de nuestra VPC executamos 'ping 192.168.11.20' y 'ping 192.168.11.20'
+
+
+![ping vpc 10 20](Images/pingvpc1.PNG?raw=true "Title")
+
+
+Para poder verificar la conexion de VPC2 con otra VPC en la consola de nuestra VPC executamos 'ping 192.168.11.20' y 'ping 192.168.11.10'
+
+
+![ping vpc 10 20](Images/pingvpc2.PNG?raw=true "Title")
+
+
+Para poder verificar la conexion de VPC3 con otra VPC en la consola de nuestra VPC executamos 'ping 192.168.11.10' y 'ping 192.168.11.10'
+
+
+![ping vpc 10 20](Images/pingvpc3.PNG?raw=true "Title")
