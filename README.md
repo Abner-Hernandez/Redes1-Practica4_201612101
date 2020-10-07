@@ -71,7 +71,7 @@ Continuamos la instalacion hasta el siguiente punto, luego es necesario pulsar e
 ![search idle](Images/Idlepc.PNG?raw=true "Title")
 
 
-Para la configuracion de las Sub Interfacez, primero es necesario entrar en el modo configuracion del router para este caso necesitamos hacer uso del comando 'configure terminal' luego pasamos a crear la sub interfaz con 'interface fastEthernet 0/0.10' luego le asignamos una direccion ip mas su mascara de red 'ip address 192.168.11.254 255.255.255.0' en este caso son dos sub interfacez, una para cada vlan 'interface fastEthernet 0/0.20', 'ip address 192.168.21.254 255.255.255.0'.
+Para la configuracion de las Sub Interfacez, primero es necesario entrar en el modo configuracion del router para este caso necesitamos hacer uso del comando 'configure terminal' luego pasamos a crear la sub interfaz con 'interface fastEthernet 0/0.10', asignamos encapsulamiento para la vlan 'encapsulation dot1Q 10' luego le asignamos una direccion ip mas su mascara de red 'ip address 192.168.11.254 255.255.255.0' en este caso son dos sub interfacez, una para cada vlan 'interface fastEthernet 0/0.20',  'encapsulation dot1Q 20' 'ip address 192.168.21.254 255.255.255.0'.
 
 
 ![Configure interface](Images/configuresubinterfacez.PNG?raw=true "Title")
