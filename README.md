@@ -10,26 +10,36 @@ La topologia a Utilizar es de tipo árbol la cual cuenta con la siguiente config
    - Conexión Interfaz f0/0 con Switch1 (8 puertos) en puerto ethernet 0
    - Configuración Sub Interfaz f0/0.10 Dirección de Red 192.168.12.0/26 Dirección IP 192.168.11.254/24
    - Configuración Sub Interfaz f0/1.20 Dirección de Red 192.168.12.64/26 Dirección IP 192.168.21.254/24
-2. Ethernet Switch 16 puertos fastethernet
-   - Conexión puerto fastethernet 1/0 con Ethernet Switch2 en puerto fastethernet 1/0 Port Chanel 1
-   - Conexión puerto fastethernet 1/1 con Ethernet Switch2 en puerto fastethernet 1/1 Port Chanel 1
-   - Conexión puerto fastethernet 1/2 con Ethernet Switch3 en puerto fastethernet 1/0 Port Chanel 2
-   - Conexión puerto fastethernet 1/3 con Ethernet Switch3 en puerto fastethernet 1/1 Port Chanel 2
-3. Ethernet Switch2 16 puertos fastethernet
-   - Conexión puerto fastethernet 1/0 con Ethernet Switch en puerto fastethernet 1/0 Port Chanel 1
-   - Conexión puerto fastethernet 1/1 con Ethernet Switch en puerto fastethernet 1/1 Port Chanel 1
-   - Conexión puerto fastethernet 1/2 con Ethernet Switch3 en puerto fastethernet 1/2 Port Chanel 3
-   - Conexión puerto fastethernet 1/3 con Ethernet Switch3 en puerto fastethernet 1/3 Port Chanel 3
-4. Ethernet Switch3 16 puertos fastethernet
-   - Conexión puerto fastethernet 1/0 con Ethernet Switch en puerto fastethernet 1/2 Port Chanel 1
-   - Conexión puerto fastethernet 1/1 con Ethernet Switch en puerto fastethernet 1/3 Port Chanel 1
-   - Conexión puerto fastethernet 1/2 con Ethernet Switch2 en puerto fastethernet 1/2 Port Chanel 3
-   - Conexión puerto fastethernet 1/3 con Ethernet Switch2 en puerto fastethernet 1/3 Port Chanel 3
-5. VPCS
+2. EtherSwitch Router 16 puertos fastethernet (ESW1)
+   - Conexión puerto fastethernet 1/0 con EtherSwitch Router2 en puerto fastethernet 1/0 Port Chanel 1
+   - Conexión puerto fastethernet 1/1 con EtherSwitch Router2 en puerto fastethernet 1/1 Port Chanel 1
+   - Conexión puerto fastethernet 1/2 con EtherSwitch Router3 en puerto fastethernet 1/0 Port Chanel 2
+   - Conexión puerto fastethernet 1/3 con EtherSwitch Router3 en puerto fastethernet 1/1 Port Chanel 2
+3. EtherSwitch Router2 16 puertos fastethernet (ESW2)
+   - Conexión puerto fastethernet 1/0 con EtherSwitch Router en puerto fastethernet 1/0 Port Chanel 1
+   - Conexión puerto fastethernet 1/1 con EtherSwitch Router en puerto fastethernet 1/1 Port Chanel 1
+   - Conexión puerto fastethernet 1/2 con EtherSwitch Router3 en puerto fastethernet 1/2 Port Chanel 3
+   - Conexión puerto fastethernet 1/3 con EtherSwitch Router3 en puerto fastethernet 1/3 Port Chanel 3
+   - Conexión puerto fastethernet 1/4 con Switch1 en puerto ethernet 0
+   - Conexión puerto fastethernet 1/5 con Switch2 en puerto ethernet 1
+4. EtherSwitch Router3 16 puertos fastethernet (ESW3)
+   - Conexión puerto fastethernet 1/0 con EtherSwitch Router en puerto fastethernet 1/2 Port Chanel 1
+   - Conexión puerto fastethernet 1/1 con EtherSwitch Router en puerto fastethernet 1/3 Port Chanel 1
+   - Conexión puerto fastethernet 1/2 con EtherSwitch Router2 en puerto fastethernet 1/2 Port Chanel 3
+   - Conexión puerto fastethernet 1/3 con EtherSwitch Router2 en puerto fastethernet 1/3 Port Chanel 3
+   - Conexión puerto fastethernet 1/4 con Switch1 en puerto ethernet 0
+   - Conexión puerto fastethernet 1/5 con Switch2 en puerto ethernet 1
+5. Switch1 8 puertos ethernet
+   - Conexión puerto ethernet 0 con EtherSwitch Router2 en puerto fastethernet 1/4 
+   - Conexión puerto ethernet 1 con EtherSwitch Router2 en puerto fastethernet 1/5 
+6. Switch1 8 puertos ethernet
+   - Conexión puerto ethernet 0 con EtherSwitch Router3 en puerto fastethernet 1/4 
+   - Conexión puerto ethernet 1 con EtherSwitch Router3 en puerto fastethernet 1/5 
+7. VPCS
    - PC1 direccion ip 192.168.11.20 máscaras de red 255.255.255.192 máscaras de subred 192.168.11.20
    - PC2 direccion ip 192.168.21.10 máscaras de red 255.255.255.192 máscaras de subed 192.168.21.10
    - PC3 direccion ip 192.168.21.20 máscaras de red 255.255.255.192 máscaras de subred 192.168.21.20
-6. Maquina Virtual
+8. Maquina Virtual
    - Tiny_Linux direccion ip 192.168.11.10 mascara subred 255.255.255.0 gateway 192.168.11.254
    
 
@@ -77,6 +87,73 @@ Para poder guardar las configuraciones realizadas al router tenemos que salir pr
 
 
 ![verificate Configuration router](Images/saveConfigRouter.PNG?raw=true "Title")
+
+
+## EtherSwitch Router
+El Software GNS3 en su version 2.2.12 por default no trae el EtherSwitch Router y es necesario agregar el dispositivo, la instalacion del EtherSwitch Router es similar a la instalacion del router c3725.
+
+
+Para la configuracion primero hay que caparlos a modo switch para esto es necesario indicarle al router que no estara en modo ruteo entramos a modo configuracion 'configure terminal', luego indicamos el modo no ruteo 'no ip routing'. tambien aplicamos las configuraciones para todos los puertos, primero indicamos el rango de las interfacez a configurar en este caso 'interfaz range fastethernet 1/0 - 15' luego seteamos las configuraciones en este caso 'speed 100', 'duplex full' luego levantamos las interfacez 'no shutdown', salimos 'exit' y guardamos 'wr', la configuracion aplica para los 3 EtherSwitch Router.
+
+
+![Configuration etherswitch](Images/confinterfaces.PNG?raw=true "Title")
+
+
+## Configuracion PortChanel
+Para configurar un portchanel es necesario entrar primero en modo configuracion 'configure terminal' luego seleccionamos las interfacez que pertenecerán al portchanel para nuestra topologia tenemos 3 portchanel 'interfaz range fastethernet 1/1 - 1' luego indicamos el portchanel y lo habilitamos 'channel-group 1 mode on' finalizamos con 'end, cabe aclarar que los portchanel se hacen en cada extremo de cada route y con el mismo nombre de portchanel.
+
+
+![portchanel](Images/confportchanel.PNG?raw=true "Title")
+
+
+## Configuracion VLAN
+Para nuestra red manejaremos 2 vlans una para VENTAS y otra para CONTABILIDAD, primero configuramos las interfacez de los EtherSwitch en modo trunk ya que estos estan conectaodos entre si y aun router, para esto entramos primero en modo configuracion 'configure terminal' luego selecionamos el rango de interfacez a configurar en este caso seleccionamos todos los puertos 'interfaz range fastethernet 1/0 - 15', colocamos los puertos en modo trunk 'switchport mode trunk' salimos 'exit', la configuracion es para los 3 EtherSwitch Router.
+
+
+![mode trunk](Images/confmodetrunk.PNG?raw=true "Title")
+
+
+Tenemos que configurar un EtherSwitch Router en la configuracion de vtp en modo servidor para poder guardar las vlans y replicarlas a los clientes, primero entramos a la base de datos de las vlans 'vlan database' luego definimos un dominio 'vtp domain redes1_201612101' y un password 'vtp password redes1_201612101' es necesario definir el modo del vtp a utilizar en este caso usaremos 'vtp v2-mode', definimos al EtherSwitch Roueter como server 'vtp server', salimos 'exit'.
+
+
+![mode server](Images/confvlaserver.PNG?raw=true "Title")
+
+
+Creamos las VLANS que definimos que trabajaremos primero ingresamos a la base de datos de las vlans 'vlan database' luego definimos la primera vlan 'vlan 10 name VENTAS'
+luego la segunda 'vlan 20 name CONTABILIDAD' salimos 'exit'.
+
+
+![create vlans](Images/createvlans.PNG?raw=true "Title")
+
+
+Es necesario que el EtherSwitch Router2 y 3 esten en vtp cliente para poder replicar las vlans primero entramos a la base de datos de las vlans 'vlan database' luego ingresamos el dominio 'vtp domain redes1_201612101' y el password 'vtp password redes1_201612101' es necesario definir el modo del vtp a utilizar en este caso usaremos 'vtp v2-mode', definimos los EtherSwitch Roueter como clientes 'vtp client', salimos 'exit'.
+
+
+![mode client](Images/confvlaclient.PNG?raw=true "Title")
+
+
+ahora podemos ver las como los clientes cuentan con las vlans definidas en el server con el comando 'sh vlan-switch'.
+
+![sh vlan](Images/shvlan.PNG?raw=true "Title")
+
+
+## Configuración Switch 8 puertos
+Necesitamos configurar 2 puertos en modo trunk para cada switch en modo trunk los cuales estan conectados a un EtherSwtich para esto primero damos clic derecho sobre el switch luego pulsamos sobre configure.
+
+
+![conf switch](Images/confswitch.PNG?raw=true "Title")
+
+
+Definimos el el acceso de los puertos ethernet 0 y un en modo trunk para este caso ingresamos el puerto y el numero de vlan cabe aclarar que usaremos vlan 1 ya que nos permitira el paso para ambas vlans 10 y 20 y agregamos el modo trunk en este caso seria dotIq.
+
+
+![conf switch trunk](Images/swmodetrunk.PNG?raw=true "Title")
+
+
+Definimos tambien el modo acceso para nuestros host para esto agregamos el numero de puerto, numero de vlan que sera definida para el puerto y access.
+
+
+![conf switch access](Images/swmodeaccess.PNG?raw=true "Title")
 
 
 ## Configuración VPC
